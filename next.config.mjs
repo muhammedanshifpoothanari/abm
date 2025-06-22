@@ -9,6 +9,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    regions: ['dxb1'],
+  },
 }
 
 export default nextConfig
+

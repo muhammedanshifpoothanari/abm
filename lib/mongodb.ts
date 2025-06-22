@@ -5,6 +5,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI
+
 const options = {}
 
 let client: MongoClient
