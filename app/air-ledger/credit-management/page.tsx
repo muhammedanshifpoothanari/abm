@@ -36,8 +36,10 @@ export default function CreditManagement() {
 
   const handleUpdateCredit = async () => {
     try {
+      console.log("Sending data:", { totalCredit, notes })  // Check values
+  
       const response = await fetch("/api/credit-settings", {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -46,20 +48,30 @@ export default function CreditManagement() {
           notes,
         }),
       })
-
+  
+      // Check if response is ok (status 200-299)
       if (response.ok) {
         alert("Credit limit updated successfully!")
         setIsEditingTotal(false)
         await fetchCreditSettings() // Refresh data
       } else {
-        const error = await response.json()
-        alert(`Error: ${error.error}`)
+        // Handle the error response
+        let errorMsg = "Unknown error"
+        try {
+          const error = await response.json()
+          errorMsg = error.error || error.message
+        } catch (jsonError) {
+          console.error('Failed to parse error response:', jsonError)
+          errorMsg = 'Invalid error response'
+        }
+        alert(`Error: ${errorMsg}`)
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error updating credit:", error)
-      alert("Error updating credit limits")
+      alert(`${totalCredit} Error updating credit limits. Error: ${error.message || error}`)
     }
   }
+  
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">

@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 import { getDatabase } from "@/lib/mongodb"
 import type { CreditSettings } from "@/lib/models/AirBooking"
@@ -54,14 +56,13 @@ export async function GET() {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const db = await getDatabase()
     const data = await request.json()
 
-    // Calculate used credit from actual bookings
     const bookings = await db.collection("air_bookings").find({}).toArray()
-    const calculatedUsedCredit = bookings.reduce((sum, booking) => sum + (booking.ticketCost || 0), 0)
+    const calculatedUsedCredit = bookings.reduce((sum, b) => sum + (b.ticketCost || 0), 0)
 
     const totalCredit = Number.parseFloat(data.totalCredit) || 0
     const availableCredit = totalCredit - calculatedUsedCredit
