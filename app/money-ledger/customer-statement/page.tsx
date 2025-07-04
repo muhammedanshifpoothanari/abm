@@ -151,6 +151,13 @@ export default function CustomerStatement() {
     }
   }
 
+  const handleAddEntry = (customerName: string) => {
+    router.push(`/money-ledger/add-entry?customer=${customerName}`)
+  }
+
+
+
+
   const handleExport = () => {
     const csvContent = [
       ["Date", "Description", "Debit", "Credit", "Balance", "Status", "Notes"],
@@ -232,8 +239,11 @@ export default function CustomerStatement() {
               <p className="text-gray-600">Complete transaction history for {customerName}</p>
             </div>
           </div>
-
           <div className="flex items-center gap-3">
+          <Button variant="outline" onClick={() => handleAddEntry(customer.name)}>
+              ➕
+              Add New Entry
+            </Button>
             <Button variant="outline" onClick={handleShare}>
               <Share2 className="h-4 w-4 mr-2" />
               Share
